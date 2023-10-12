@@ -1,7 +1,7 @@
 include(Cmake/mingw-toolchain.cmake)
 cmake_minimum_required(VERSION 3.23)
 
-project(CProjectSkeleton 
+project(Patterns 
         VERSION 1.0
         DESCRIPTION "template for C"
         HOMEPAGE_URL "https://github.com/bertoncelj/CProjectTemplate"
@@ -34,17 +34,26 @@ if(CREATE_DOXYGEN_DOC)
 endif()
 
 # Scrible
-add_subdirectory(Scrible)
+# add_subdirectory(Scrible)
 
+# Sensor libray
+add_subdirectory(Lib)
 
 # Create main executable 
 add_executable(${PROJECT_NAME} 
   App/main.c
 )
 
+target_include_directories(${PROJECT_NAME} PUBLIC
+                          "${PROJECT_BINARY_DIR}"
+                          "${PROJECT_SOURCE_DIR}/Lib/Sensor"
+                          )
+
 target_link_libraries(${PROJECT_NAME} 
                       PUBLIC 
-                      compiler_flags)
+                      sensor
+                      compiler_flags 
+                    )
 
 
 # UNIT TEST

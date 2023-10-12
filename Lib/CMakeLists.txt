@@ -1,0 +1,5 @@
+add_library(sensor Sensor/sensor.c)
+
+target_include_directories(sensor PRIVATE Sensor)
+
+target_link_libraries(sensor PUBLIC compiler_flags)

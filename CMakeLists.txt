@@ -34,7 +34,7 @@ if(CREATE_DOXYGEN_DOC)
 endif()
 
 # Scrible
-# add_subdirectory(Scrible)
+add_subdirectory(Scrible)
 
 # Sensor libray
 add_subdirectory(Lib)
@@ -48,12 +48,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC
                           "${PROJECT_BINARY_DIR}"
                           "${PROJECT_SOURCE_DIR}/Lib/Sensor"
                           "${PROJECT_SOURCE_DIR}/Lib/RR"
+                          "${PROJECT_SOURCE_DIR}/Lib/Poly"
                           )
 
 target_link_libraries(${PROJECT_NAME} 
                       PUBLIC 
                       sensor
                       RR
+                      poly
                       compiler_flags 
                     )
 

@@ -1,4 +1,4 @@
-add_library(poly animal.c dog.c)
+add_library(poly animal.c dog.c cat.c)
 
 target_include_directories(poly PRIVATE .)
 

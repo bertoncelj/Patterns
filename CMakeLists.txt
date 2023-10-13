@@ -47,11 +47,13 @@ add_executable(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PUBLIC
                           "${PROJECT_BINARY_DIR}"
                           "${PROJECT_SOURCE_DIR}/Lib/Sensor"
+                          "${PROJECT_SOURCE_DIR}/Lib/RR"
                           )
 
 target_link_libraries(${PROJECT_NAME} 
                       PUBLIC 
                       sensor
+                      RR
                       compiler_flags 
                     )
 

@@ -3,7 +3,10 @@
 #include "queue.h"
 #include "sensor.h"
 
-int main(void) {
+#include "animal.h"
+#include "dog.h"
+
+int main_1(void) {
   sensor_t sens_0;
   sensor_create(&sens_0, 10, 22, 123, 0);
 
@@ -30,5 +33,19 @@ int main(void) {
     print_all_elements_cb(&arr);
   }
 
+  return 0;
+}
+
+int main(int argc, char **args) {
+  Animal *dog = animal_dog_create();
+
+  animal_speak(dog); // bark!
+
+  // dog specific
+  ((AnimalDog *)dog)->dog_only();
+
+  // cat specific
+
+  animal_destroy(dog);
   return 0;
 }

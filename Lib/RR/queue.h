@@ -7,6 +7,7 @@ typedef struct queue_s queue_t;
 
 struct queue_s {
   int buff[QUEUE_MAX_SIZE];
+  void *buffer;
   int head;
   int tail;
   int size;

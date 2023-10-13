@@ -4,9 +4,16 @@ add_executable(notes
 )
 
 # Link FreeRTOS as a static library
-target_link_libraries(notes
+message(${PROJECT_SOURCE_DIR})
+target_include_directories(notes PUBLIC
+                          "${PROJECT_BINARY_DIR}"
+                          "${PROJECT_SOURCE_DIR}/Lib/Poly"
+                          )
 
-               INTERFACE
-               compiler_flags
-               )
+target_link_libraries(notes
+                      PUBLIC 
+                      poly
+                      compiler_flags 
+                    )
+
 

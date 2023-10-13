@@ -18,9 +18,9 @@ Animal *animal_dog_create() {
   // assign function implementations to interface
   static const AnimalInterface vtable = {dog_speak, dog_destroy};
   static Animal base = {&vtable};
-
+  static AnimalDog swag;
   // create the AnimalDog instance
-  AnimalDog *dog = malloc(sizeof(*dog));
+  AnimalDog *dog = &swag;
   memcpy(&dog->base, &base, sizeof(base));
 
   // AnimalDog specific members

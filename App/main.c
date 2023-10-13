@@ -4,6 +4,7 @@
 #include "sensor.h"
 
 #include "animal.h"
+#include "cat.h"
 #include "dog.h"
 
 int main_1(void) {
@@ -37,15 +38,22 @@ int main_1(void) {
 }
 
 int main(int argc, char **args) {
+
   Animal *dog = animal_dog_create();
+  Animal *cat = animal_cat_create();
 
   animal_speak(dog); // bark!
+  animal_speak(cat); // meow!
 
   // dog specific
   ((AnimalDog *)dog)->dog_only();
 
   // cat specific
+  ((AnimalCat *)cat)->cat_only();
+  printf("cat id =  %d\n", ((AnimalCat *)cat)->cat_id);
 
   animal_destroy(dog);
+  animal_destroy(cat);
+  return 0;
   return 0;
 }

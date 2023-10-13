@@ -11,8 +11,8 @@ struct queue_s {
   int tail;
   int size;
   int (*is_full)(queue_t const *self);
-  int (*is_empty)(queue_t *const self);
-  int (*get_size)(queue_t *const self);
+  int (*is_empty)(queue_t const *self);
+  int (*get_size)(queue_t const *self);
   void (*insert_element)(queue_t *const self, const int element);
   int (*remove_element)(queue_t *const self);
 };
@@ -21,8 +21,8 @@ struct queue_s {
 void init_queue(queue_t *const self, int (*is_full_func)(queue_t const *self),
                 int (*is_empty_func)(queue_t const *self),
                 int (*get_size_func)(queue_t const *self),
-                int (*insert_element_func)(queue_t *const self,
-                                           const int element),
+                void (*insert_element_func)(queue_t *const self,
+                                            const int element),
                 int (*remove_element_func)(queue_t *const self));
 
 void destroy_queue(queue_t const *self);
@@ -30,9 +30,10 @@ void destroy_queue(queue_t const *self);
 // Methods
 
 int is_full_cb(queue_t const *self);
-int is_empty_cb(queue_t *const self);
-int get_size_cb(queue_t *const self);
+int is_empty_cb(queue_t const *self);
+int get_size_cb(queue_t const *self);
 void insert_element_cb(queue_t *const self, const int element);
+void print_all_elements_cb(queue_t *const self);
 
 int remove_element_cb(queue_t *const self);
 

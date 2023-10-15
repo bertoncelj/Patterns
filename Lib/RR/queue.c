@@ -1,66 +1,58 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
 
 #include "queue.h"
 
-void init_queue(queue_t *const self, int (*is_full_func)(queue_t const *self),
-                int (*is_empty_func)(queue_t const *self),
-                int (*get_size_func)(queue_t const *self),
-                void (*insert_element_func)(queue_t *const self,
-                                            const int element),
-                int (*remove_element_func)(queue_t *const self)) {
-
+void init_queue(queue_t *const self, uint8_t *buffer, size_t item_size,
+                size_t capacity) {
+  // Safty check
+  // if (buffer != NULL)
+  // return;
+  self->buffer = buffer;
   self->head = 0;
   self->tail = 0;
   self->size = 0;
-  // initialize member function pointers
-  self->is_full = is_full_func;
-  self->is_empty = is_empty_func;
-  self->get_size = get_size_func;
-  self->insert_element = insert_element_func;
-  self->remove_element = remove_element_func;
+  self->capacity = capacity;
+  self->item_size = item_size;
 }
 
-void destroy_queue(queue_t const *self) {
-  // TODO: rewrite and add destroy
-  printf("%d", (int *)self);
-};
-
-int is_full_cb(queue_t const *self) {
-  return (self->head + 1) % QUEUE_MAX_SIZE == self->tail;
+int8_t is_full(queue_t const *self) {
+  return ((self->head + self->item_size) %
+          (self->item_size * self->capacity)) == self->tail;
 }
 
-int is_empty_cb(queue_t const *self) { return (self->head == self->tail); }
-
-int get_size_cb(queue_t const *self) { return self->size; }
-
-void insert_element_cb(queue_t *const self, const int element) {
-  if (!self->is_full(self)) {
-
-    printf("element in %d\n", element);
-    self->buff[self->head] = element;
-
-    printf("element in %d\n", self->buff[self->head]);
-    self->head = (self->head + 1) % QUEUE_MAX_SIZE;
-    ++self->size;
+int8_t is_active(queue_t *self) {
+  if (self != NULL && self->buffer != NULL && self->capacity > 0) {
+    return 1;
+  } else {
+    return -1;
   }
 }
 
-int remove_element_cb(queue_t *const self) {
-  int value = 0;
-  if (!self->is_empty(self)) {
-    value = self->buff[self->tail];
-    self->tail = (self->tail + 1) % QUEUE_MAX_SIZE;
-    --self->size;
-  }
-  // make return Some or None
-  return value;
+int8_t is_empty(queue_t const *self) { return (self->head == self->tail); }
+
+int8_t get_size(queue_t const *self) { return self->size; }
+
+int8_t insert_element(queue_t *self, const void *item) {
+  if (self->size == self->capacity)
+    return 0;
+
+  memcpy(&self->buffer[self->head], item, self->item_size);
+  self->head =
+      (self->head + self->item_size) % (self->capacity * self->item_size);
+  self->size++;
+
+  return 1;
 }
 
-void print_all_elements_cb(queue_t *const self) {
-  if (!self->is_empty(self)) {
-    for (int idx = 0; idx < self->size; idx++) {
-      printf("idx: %d -> value: %d\n", idx, self->buff[self->tail + idx]);
-    }
-  }
+int8_t remove_element(queue_t *const self, void *item) {
+  if (self->size == 0)
+    return 0;
+
+  memcpy(item, &self->buffer[self->tail], self->item_size);
+  self->tail =
+      (self->tail + self->item_size) % (self->capacity * self->item_size);
+  self->size--;
+
+  return 1;
 }

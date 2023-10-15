@@ -1,59 +1,58 @@
 #include <stdio.h>
 
-#include "queue.h"
-#include "sensor.h"
-
 #include "animal.h"
 #include "cat.h"
 #include "dog.h"
+#include "queue.h"
+#include "sensor.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
 
-int main_1(void) {
-  sensor_t sens_0;
-  sensor_create(&sens_0, 10, 22, 123, 0);
+// Example usage:
+typedef struct {
+  int id;
+  char name[20];
+} Person;
 
-  print_sensor(&sens_0);
-  set_value(&sens_0, 99);
-  printf("New value %d ", get_value(&sens_0));
-  printf("End of program\n");
+void cb_print(const queue_t *cb) {
+  printf("Circular Buffer Contents:\n");
+  int byte_pos = cb->tail;
+  for (int i = 0; i < (int)cb->size; i++) {
+    Person *p = (Person *)(&cb->buffer[byte_pos]);
+    printf("ID: %d, Name: %s\n", p->id, p->name);
 
-  queue_t arr;
-  init_queue(&arr, is_full_cb, is_empty_cb, get_size_cb, insert_element_cb,
-             remove_element_cb);
-
-  printf("is full %d\n", arr.is_full(&arr));
-  if (arr.is_full(&arr)) {
+    byte_pos = (byte_pos + cb->item_size) % (cb->capacity * cb->item_size);
   }
-  for (int i = 0; i < 9; i++) {
-    insert_element_cb(&arr, i + 1);
-    printf("Get size %d\n", get_size_cb(&arr));
-    print_all_elements_cb(&arr);
-  }
-  for (int i = 0; i < 9; i++) {
-    remove_element_cb(&arr);
-    printf("Get size %d\n", get_size_cb(&arr));
-    print_all_elements_cb(&arr);
-  }
-
-  return 0;
 }
 
-int main(int argc, char **args) {
+int main(void) {
+  queue_t que;
+  // Person persons[10] = {{1, "John"}, {2, "Jane"}, {3, "Doe"}};
+  Person persons[10] = {};
 
-  Animal *dog = animal_dog_create();
-  Animal *cat = animal_cat_create();
+  Person neki = {4, "hoe"};
+  Person neki1 = {5, "moe"};
+  printf("persons: %d", sizeof(persons));
+  printf("Person: %d", sizeof(Person));
+  init_queue(&que, (uint8_t *)persons, sizeof(Person),
+             sizeof(persons) / sizeof(Person));
+  insert_element(&que, &neki);
+  cb_print(&que);
+  insert_element(&que, &neki1);
+  cb_print(&que);
 
-  animal_speak(dog); // bark!
-  animal_speak(cat); // meow!
-
-  // dog specific
-  ((AnimalDog *)dog)->dog_only();
-
-  // cat specific
-  ((AnimalCat *)cat)->cat_only();
-  printf("cat id =  %d\n", ((AnimalCat *)cat)->cat_id);
-
-  animal_destroy(dog);
-  animal_destroy(cat);
-  return 0;
+  for (int i = 0; i < 10; i++) {
+    if (!insert_element(&que, &neki1))
+      printf("Failed!\n");
+    cb_print(&que);
+  }
+  Person yolo;
+  for (int i = 0; i < 10; i++) {
+    if (!remove_element(&que, &yolo))
+      printf("Failed!\n");
+    cb_print(&que);
+  }
+  // remove_element();
   return 0;
 }

@@ -1,44 +1,40 @@
 #ifndef _queue_h_
 #define _queue_h_
 
+#include <stdint.h>
+
 #define QUEUE_MAX_SIZE 10
 
 typedef struct queue_s queue_t;
 
 struct queue_s {
-  int buff[QUEUE_MAX_SIZE];
-  void *buffer;
-  int head;
-  int tail;
-  int size;
-  int (*is_full)(queue_t const *self);
-  int (*is_empty)(queue_t const *self);
-  int (*get_size)(queue_t const *self);
-  void (*insert_element)(queue_t *const self, const int element);
-  int (*remove_element)(queue_t *const self);
+  uint8_t *buffer;
+  uint16_t head;
+  uint16_t tail;
+  size_t size;
+  size_t item_size;
+  size_t capacity;
 };
 
 // Constructor and destructor
-void init_queue(queue_t *const self, int (*is_full_func)(queue_t const *self),
-                int (*is_empty_func)(queue_t const *self),
-                int (*get_size_func)(queue_t const *self),
-                void (*insert_element_func)(queue_t *const self,
-                                            const int element),
-                int (*remove_element_func)(queue_t *const self));
+void init_queue(queue_t *const self, uint8_t *buffer, size_t item_size,
+                size_t capacity);
 
-void destroy_queue(queue_t const *self);
+// void destroy_queue(queue_t const *self);
 
 // Methods
 
-int is_full_cb(queue_t const *self);
-int is_empty_cb(queue_t const *self);
-int get_size_cb(queue_t const *self);
-void insert_element_cb(queue_t *const self, const int element);
-void print_all_elements_cb(queue_t *const self);
+int8_t is_full(queue_t const *self);
+int8_t is_empty(queue_t const *self);
+int8_t get_size(queue_t const *self);
+int8_t is_active(queue_t *self);
 
-int remove_element_cb(queue_t *const self);
+int8_t insert_element(queue_t *const cb, const void *item);
+int8_t remove_element(queue_t *const cb, void *item);
 
-queue_t *queue_create(void);
-void queue_destroy(queue_t const *self);
+// void print_all_elements(queue_t *const self);
+
+// // queue_t *queue_create(void);
+// void queue_destroy(queue_t const *self);
 
 #endif // queue_h

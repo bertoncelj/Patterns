@@ -31,6 +31,7 @@ int8_t is_active(queue_t *self);
 
 int8_t insert_element(queue_t *const cb, const void *item);
 int8_t remove_element(queue_t *const cb, void *item);
+int8_t look_first_element(queue_t *const self, void *item);
 
 // void print_all_elements(queue_t *const self);
 

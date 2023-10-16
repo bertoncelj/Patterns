@@ -56,3 +56,11 @@ int8_t remove_element(queue_t *const self, void *item) {
 
   return 1;
 }
+
+int8_t look_first_element(queue_t *const self, void *item) {
+  if (self->size == 0)
+    return 0;
+
+  memcpy(item, &self->buffer[self->tail], self->item_size);
+  return 1;
+}

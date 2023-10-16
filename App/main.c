@@ -25,8 +25,7 @@ void cb_print(const queue_t *cb) {
     byte_pos = (byte_pos + cb->item_size) % (cb->capacity * cb->item_size);
   }
 }
-
-int main(void) {
+void RR_test(void) {
   queue_t que;
   // Person persons[10] = {{1, "John"}, {2, "Jane"}, {3, "Doe"}};
   Person persons[10] = {};
@@ -35,8 +34,10 @@ int main(void) {
   Person neki1 = {5, "moe"};
   printf("persons: %d", sizeof(persons));
   printf("Person: %d", sizeof(Person));
+
   init_queue(&que, (uint8_t *)persons, sizeof(Person),
              sizeof(persons) / sizeof(Person));
+
   insert_element(&que, &neki);
   cb_print(&que);
   insert_element(&que, &neki1);
@@ -54,5 +55,11 @@ int main(void) {
     cb_print(&que);
   }
   // remove_element();
+}
+
+int main(void) {
+
+  RR_test();
+
   return 0;
 }

@@ -9,11 +9,13 @@ add_executable(tests tests.c)
 
 # The order is VERY importnet (else Lineker will not work)
 target_link_libraries(tests
+        RR 
+        compiler_flags
         cmocka-static
         )
 # Include for ctests
-# target_include_directories(tests PUBLIC
-      # ${PROJECT_SOURCE_DIR}/Simulation/inc)
+target_include_directories(tests PUBLIC
+  ${PROJECT_SOURCE_DIR}/Lib/RR)
 
 # target_compile_options(tests PRIVATE -fsanitize=undefined,leak,address)
 # target_link_options(tests PRIVATE -fsanitize=undefined,leak,address) 

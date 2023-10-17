@@ -17,8 +17,8 @@ struct queue_s {
 };
 
 // Constructor and destructor
-void init_queue(queue_t *const self, uint8_t *buffer, size_t item_size,
-                size_t capacity);
+int8_t init_queue(queue_t *const self, uint8_t *buffer, size_t item_size,
+                  size_t capacity);
 
 // void destroy_queue(queue_t const *self);
 
@@ -32,6 +32,8 @@ int8_t is_active(queue_t *self);
 int8_t insert_element(queue_t *const cb, const void *item);
 int8_t remove_element(queue_t *const cb, void *item);
 int8_t look_first_element(queue_t *const self, void *item);
+size_t remaining_space(queue_t *const self);
+size_t used_space(queue_t *const self);
 
 // void print_all_elements(queue_t *const self);
 

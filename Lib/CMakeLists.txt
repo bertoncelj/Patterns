@@ -13,3 +13,4 @@ target_include_directories(RR PRIVATE Sensor)
 target_link_libraries(RR PUBLIC compiler_flags)
 
 add_subdirectory(Poly)
+add_subdirectory(Event)

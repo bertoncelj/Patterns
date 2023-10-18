@@ -7,12 +7,14 @@ add_executable(notes
 message(${PROJECT_SOURCE_DIR})
 target_include_directories(notes PUBLIC
                           "${PROJECT_BINARY_DIR}"
-                          "${PROJECT_SOURCE_DIR}/Lib/Poly"
+                          "${PROJECT_SOURCE_DIR}/Lib/Event"
+                          "${PROJECT_SOURCE_DIR}/Lib/RR"
                           )
 
 target_link_libraries(notes
                       PUBLIC 
-                      poly
+                      event
+                      RR
                       compiler_flags 
                     )
 

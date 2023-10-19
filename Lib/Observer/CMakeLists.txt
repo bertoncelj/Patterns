@@ -1,6 +1,7 @@
 # Create notes  scrible for quick test 
 add_executable(observer
                main.c
+               display_client.c
                gas_data.c
                gas_sensor.c
                gas_notification_handle.c

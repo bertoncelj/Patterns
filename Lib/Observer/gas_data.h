@@ -5,11 +5,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct gas_data_s {
+typedef struct gas_data_t gas_data_t;
+
+struct gas_data_t {
   uint8_t N2_conc;
   uint8_t O2_conc;
   uint16_t flow_rate;
-} gas_data_t;
+};
 
 // Constructors and destructors
 void gas_data_init(gas_data_t *const self);

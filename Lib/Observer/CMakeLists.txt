@@ -1,6 +1,9 @@
 # Create notes  scrible for quick test 
 add_executable(observer
                main.c
+               gas_data.c
+               gas_sensor.c
+               gas_notification_handle.c
 )
 
 # Link FreeRTOS as a static library

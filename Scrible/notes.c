@@ -3,19 +3,14 @@
 #include "event.h"
 #include "queue.h"
 
+#include "input.h"
+
 // add + 1
 #define MAX_NUM_COMMANDS 10
 
 // Global
 uint8_t buffer_g[MAX_NUM_COMMANDS * sizeof(commands_t)];
 queue_t queue_g;
-
-void input(void) {
-
-  // neki neki
-  printf("input\n");
-  // neki neki
-}
 
 void output(void) {
 
@@ -26,6 +21,8 @@ void output(void) {
 
 int main() {
   // Define the event table
+
+  srand(time(NULL));
   struct commands_s event_table[20] = {
       {"led1 toggle", "<led_on_1>", 0, foo1},
       {"led2 toggle", "<led_on_2>", 0, foo2},
@@ -38,12 +35,12 @@ int main() {
   init_queue(&queue_g, (uint8_t *)buffer_g, sizeof(commands_t),
              MAX_NUM_COMMANDS);
 
-  for (uint8_t i = 0; i < 5; i++) {
-    insert_element(&queue_g, &event_table[i]);
-  }
-  uint8_t loop = 5;
+  // for (uint8_t i = 0; i < 5; i++) {
+  // insert_element(&queue_g, &event_table[i]);
+  // }
+  uint8_t loop = 2;
   while (loop--) {
-    input();
+    input(&queue_g);
     event_handler(&queue_g);
     output();
   }

@@ -14,8 +14,8 @@ typedef enum result_e {
 } event_t;
 
 typedef struct commands_s {
-  char name[20];
-  char command[20];
+  uint8_t name[20];
+  uint8_t command[20];
   uint8_t priority;
   event_t (*event_func)(void);
 } commands_t;

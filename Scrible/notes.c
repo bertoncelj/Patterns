@@ -2,6 +2,7 @@
 
 #include "event.h"
 #include "queue.h"
+#include "time.h"
 
 #include "input.h"
 
@@ -23,13 +24,6 @@ int main() {
   // Define the event table
 
   srand(time(NULL));
-  struct commands_s event_table[20] = {
-      {"led1 toggle", "<led_on_1>", 0, foo1},
-      {"led2 toggle", "<led_on_2>", 0, foo2},
-      {"led3 toggle", "<led_on_3>", 0, foo3},
-      {"led4 toggle", "<led_on_4>", 0, foo4},
-      {"led5 toggle", "<led_on_5>", 0, foo5},
-  };
 
   // init
   init_queue(&queue_g, (uint8_t *)buffer_g, sizeof(commands_t),

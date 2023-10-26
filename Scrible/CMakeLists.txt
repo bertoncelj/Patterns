@@ -1,6 +1,7 @@
 # Create notes  scrible for quick test 
 add_executable(notes
                notes.c
+               input.c
 )
 
 # Link FreeRTOS as a static library

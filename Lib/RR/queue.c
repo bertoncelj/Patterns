@@ -3,6 +3,8 @@
 
 #include "queue.h"
 
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
+
 int8_t init_queue(queue_t *const self, uint8_t *buffer, size_t item_size,
                   size_t capacity) {
   // Check if inputs are correct format
@@ -56,6 +58,47 @@ int8_t insert_element(queue_t *self, const void *item) {
   return 1;
 }
 
+int8_t insert_bytes(queue_t *self, const void *data, size_t btw) {
+  uint16_t free_space;
+  uint16_t copy_size;
+
+  // Check inputs
+  // item size must be 1
+  if (self == NULL || data == NULL || btw == 0 || self->item_size != 1)
+    return 0;
+
+  // Check if full
+  if (is_full(self) || self->size == self->capacity - 1)
+    return 0;
+
+  // Check if there is aviable free space to write
+  free_space = remaining_space(self);
+  btw = MIN(free_space, btw);
+  if (btw == 0)
+    return 0;
+
+  // write data into first part
+  copy_size = self->capacity - self->head;
+  memcpy(&self->buffer[self->head], data, copy_size);
+  self->head = (self->head + copy_size) %
+               (self->capacity * self->item_size); // item_size must be 1
+  self->size += copy_size;
+  btw -= copy_size;
+
+  // write data in top part
+  if (btw > 0) {
+    memcpy(&self->buffer[self->head], &data[copy_size], btw);
+    self->head = self->head =
+        (self->head + btw) %
+        (self->capacity * self->item_size); // item_size must be 1
+  }
+
+  // check if there was no buffer overflow
+  if (self->head >= self->capacity)
+    self->head = 0;
+
+  return btw + copy_size;
+}
 int8_t remove_element(queue_t *const self, void *item) {
   // Check inputs
   if (self == NULL || item == NULL)

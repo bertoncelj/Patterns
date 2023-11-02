@@ -13,6 +13,8 @@ typedef enum result_e {
   EVENT_REENTRE = 3,
 } event_t;
 
+typedef enum state_s { RUNNING, SLEEP } task_state;
+
 typedef struct commands_s {
   uint8_t name[20];
   uint8_t command[20];

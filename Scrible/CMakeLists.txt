@@ -10,11 +10,13 @@ target_include_directories(notes PUBLIC
                           "${PROJECT_BINARY_DIR}"
                           "${PROJECT_SOURCE_DIR}/Lib/Event"
                           "${PROJECT_SOURCE_DIR}/Lib/RR"
+                          "${PROJECT_SOURCE_DIR}/Lib/Output"
                           )
 
 target_link_libraries(notes
                       PUBLIC 
                       event
+                      output
                       RR
                       compiler_flags 
                     )

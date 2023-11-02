@@ -93,9 +93,11 @@ void process_received_data(queue_t *que, uint8_t *data, uint8_t length) {
 }
 
 uint8_t get_data_rx(uint8_t port, void *buff, uint8_t wanted_data) {
-  const char *dummy_data_examples[] = {"<cmd1><cmd2><cmd3>",
-                                       "<cmd4><incomplete", "complete><cmd5>",
-                                       "<empty><><cmd6>", "wrong><cmd7><cmd8>"};
+  const char *dummy_data_examples[] = {
+      "<cmd1><cmd2><cmd3>", "<cmd1>",
+      // "<cmd4><incomplete", "complete><cmd5>",
+      // "<empty><><cmd6>", "wrong><cmd7><cmd8>"
+  };
 
   // Choose a random example
   int example_index =

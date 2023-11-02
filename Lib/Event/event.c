@@ -4,6 +4,11 @@
 #include "event.h"
 #include "queue.h"
 
+#include "output.h"
+
+uint8_t text1[10] = "Hello1text";
+uint8_t text2[10] = "Hello2text";
+uint8_t text3[10] = "Hello3text";
 struct commands_s event_table[20] =
 
     {
@@ -12,22 +17,25 @@ struct commands_s event_table[20] =
 };
 
 void event_init();
-
 //
 // Sample event function 1
 event_t foo1() {
   printf("Executing event for LED 1 toggle.\n");
+  output_print(text1, 10);
+
   return EVENT_DONE;
 }
 
 // Sample event function 2
 event_t foo2() {
   printf("Executing event for LED 2 toggle.\n");
+  output_print(text2, 10);
   return EVENT_DONE;
 }
 // Sample event function 2
 event_t foo3() {
   static uint8_t entre = 0;
+  output_print(text3, 10);
   printf("Executing event for LED 3 toggle entre %d.\n", entre++);
   if (entre == 2)
     return EVENT_DONE;

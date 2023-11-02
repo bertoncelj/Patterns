@@ -5,6 +5,7 @@
 #include "time.h"
 
 #include "input.h"
+#include "output.h"
 
 // add + 1
 #define MAX_NUM_COMMANDS 10
@@ -12,13 +13,6 @@
 // Global
 uint8_t buffer_g[MAX_NUM_COMMANDS * sizeof(commands_t)];
 queue_t queue_g;
-
-void output(void) {
-
-  // neki neki
-  printf("output\n");
-  // neki neki
-}
 
 int main() {
   // Define the event table
@@ -29,6 +23,7 @@ int main() {
   init_queue(&queue_g, (uint8_t *)buffer_g, sizeof(commands_t),
              MAX_NUM_COMMANDS);
 
+  output_init();
   // for (uint8_t i = 0; i < 5; i++) {
   // insert_element(&queue_g, &event_table[i]);
   // }

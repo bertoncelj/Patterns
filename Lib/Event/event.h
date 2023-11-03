@@ -15,7 +15,7 @@ typedef enum result_e {
 
 typedef enum state_s { INIT, RUNNING, SLEEP } task_state_t;
 
-typedef enum input_s { RUN, STOP, TOGGLE, NONE } input_state_t;
+typedef enum input_s { RUN, STOP, TOGGLE, NONE, DUMMPY } input_state_t;
 
 typedef struct commands_s {
   uint8_t name[20];

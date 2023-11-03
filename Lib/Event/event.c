@@ -9,22 +9,14 @@
 uint8_t text1[10] = "Hello1text";
 uint8_t text2[10] = "Hello2text";
 uint8_t text3[10] = "Hello3text";
-struct commands_s event_table[20] =
 
-    {
-        {"led1 toggle", "<led_on_1>", 0, foo1},
-        {"led2 toggle", "<led_on_2>", 0, foo2},
-};
-
-void event_init();
-//
 // Sample event function 1
-event_t foo1() {
-  printf("Executing event for LED 1 toggle.\n");
-  output_print(text1, 10);
-
-  return EVENT_DONE;
-}
+// event_t foo1(task_state state) {
+// printf("Executing event for LED 1 toggle.\n");
+// output_print(text1, 10);
+//
+// return EVENT_DONE;
+// }
 
 // Sample event function 2
 event_t foo2() {
@@ -55,6 +47,10 @@ event_t foo5() {
   return EVENT_DONE;
 }
 
+static void copy_and_modify_commands(const commands_t *src, commands_t *dst) {
+  *dst = *src;             // Copy each structure
+  dst->input_state = NONE; // Set input_state to NONE
+}
 // Event execution function
 event_t event_execute(struct commands_s *event) {
 
@@ -63,19 +59,25 @@ event_t event_execute(struct commands_s *event) {
     return 0;
 
   // Execute given command
-  return event->event_func();
+  return event->event_func(event->input_state);
 }
-
+void print_command(const commands_t *self) {
+  char *input_s[] = {"RUN", "TOGGLE", "STOP", "NONE"};
+  printf("-> command: %s %s \n", self->command, input_s[self->input_state]);
+}
 // Event handler to loop through all events
 void event_handler(queue_t *const queue) {
 
   // get current commands to execute
   size_t n_comm_to_exec = queue->size;
   event_t comm_res;
+  commands_t proc_new;
+
   // execute commands
   for (size_t i = 0; i < n_comm_to_exec; i++) {
     commands_t comm_in_proc;
     remove_element(queue, &comm_in_proc);
+    print_command(&comm_in_proc);
     comm_res = event_execute(&comm_in_proc);
 
     switch (comm_res) {
@@ -90,7 +92,8 @@ void event_handler(queue_t *const queue) {
 
     case EVENT_AGAIN: {
       printf("event_again\n");
-      insert_element(queue, &comm_in_proc);
+      copy_and_modify_commands(&comm_in_proc, &proc_new);
+      insert_element(queue, &proc_new);
       break;
     }
 

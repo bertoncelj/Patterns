@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "event_table.h"
 #include "input.h"
 
 #define MAX_RECEIVED_DATA 100
@@ -14,12 +15,6 @@ typedef enum { OUTSIDE_COMMAND = 0, INSIDE_COMMAND } parse_state_t;
 parse_state_t parse_state = OUTSIDE_COMMAND;
 uint8_t command_buffer[MAX_COMMAND_LENGTH];
 uint8_t command_index = 0;
-
-struct commands_s avaiable_event_table[20] = {
-    {"description1", "cmd1", 0, foo1}, {"description2", "cmd2", 0, foo2},
-    {"description3", "cmd3", 0, foo3}, {"description4", "cmd4", 0, foo4},
-    {"description5", "cmd5", 0, foo5},
-};
 
 // In this example, the cmdcmp function compares two  cmd1 and cmd2.
 // It returns 0 if the strings are equal, a negative value if cmd1 is less than
@@ -94,11 +89,13 @@ void process_received_data(queue_t *que, uint8_t *data, uint8_t length) {
 
 uint8_t get_data_rx(uint8_t port, void *buff, uint8_t wanted_data) {
   const char *dummy_data_examples[] = {
-      "<cmd1><cmd2><cmd3>", "<cmd1>",
+      "<run_led><tog_led><run_led><stop_led>"
+      // "<cmd1><cmd2><cmd3>",
+      // "<cmd1>",
       // "<cmd4><incomplete", "complete><cmd5>",
       // "<empty><><cmd6>", "wrong><cmd7><cmd8>"
   };
-
+  // entree  = 0;
   // Choose a random example
   int example_index =
       rand() % (sizeof(dummy_data_examples) / sizeof(dummy_data_examples[0]));
@@ -119,12 +116,17 @@ uint8_t get_data_rx(uint8_t port, void *buff, uint8_t wanted_data) {
 
 void input(queue_t *que) {
 
+  static int entree = 0;
   uint8_t rx_buffer[MAX_RECEIVED_DATA];
 
   printf("input\n");
+  if (entree == 1)
+    return;
+
   uint8_t received_length = get_data_rx(0, rx_buffer, MAX_RECEIVED_DATA);
 
   if (received_length > 0) {
     process_received_data(que, rx_buffer, received_length);
   }
+  entree++;
 }

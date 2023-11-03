@@ -27,7 +27,7 @@ int main() {
   // for (uint8_t i = 0; i < 5; i++) {
   // insert_element(&queue_g, &event_table[i]);
   // }
-  uint8_t loop = 2;
+  uint8_t loop = 3;
   while (loop--) {
     input(&queue_g);
     event_handler(&queue_g);

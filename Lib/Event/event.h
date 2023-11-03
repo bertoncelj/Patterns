@@ -13,20 +13,17 @@ typedef enum result_e {
   EVENT_REENTRE = 3,
 } event_t;
 
-typedef enum state_s { RUNNING, SLEEP } task_state;
+typedef enum state_s { INIT, RUNNING, SLEEP } task_state_t;
+
+typedef enum input_s { RUN, STOP, TOGGLE, NONE } input_state_t;
 
 typedef struct commands_s {
   uint8_t name[20];
   uint8_t command[20];
   uint8_t priority;
-  event_t (*event_func)(void);
+  event_t (*event_func)(input_state_t);
+  input_state_t input_state;
 } commands_t;
-
-event_t foo1();
-event_t foo2();
-event_t foo3();
-event_t foo4();
-event_t foo5();
 
 event_t event_execute(struct commands_s *event);
 

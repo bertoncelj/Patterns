@@ -1,5 +1,6 @@
 add_library(event 
             ${PROJECT_SOURCE_DIR}/Lib/Tasks/task_led.c
+            ${PROJECT_SOURCE_DIR}/Lib/Tasks/task.c
             event.c
             event_table.c)
 

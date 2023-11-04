@@ -12,11 +12,12 @@
 
 typedef enum { OUTSIDE_COMMAND = 0, INSIDE_COMMAND } parse_state_t;
 
-parse_state_t parse_state = OUTSIDE_COMMAND;
-uint8_t command_buffer[MAX_COMMAND_LENGTH];
-uint8_t command_index = 0;
+// GLOBALS
+static parse_state_t parse_status_g = OUTSIDE_COMMAND;
+static uint8_t command_buffer_g[MAX_COMMAND_LENGTH];
+static uint8_t command_idx_g = 0;
 
-// In this example, the cmdcmp function compares two  cmd1 and cmd2.
+// cmdcmp function compares two  cmd1 and cmd2.
 // It returns 0 if the strings are equal, a negative value if cmd1 is less than
 // cmd2, and a positive value if cmd1 is greater than cmd2.
 __inline static int8_t _cmdcmp(const uint8_t *cmd1, const uint8_t *cmd2) {
@@ -29,13 +30,21 @@ __inline static int8_t _cmdcmp(const uint8_t *cmd1, const uint8_t *cmd2) {
 }
 
 commands_t *find_command(uint8_t *command) {
+  // Check input
+  if (command == NULL)
+    return NULL;
+
   for (uint8_t idx = 0;
        idx < sizeof(avaiable_event_table) / sizeof(avaiable_event_table[0]);
        ++idx) {
+
     if (_cmdcmp(command, avaiable_event_table[idx].command) == 0) {
+      // command found
       return &avaiable_event_table[idx];
     }
   }
+
+  // command not found
   return NULL;
 }
 
@@ -43,22 +52,22 @@ void process_received_data(queue_t *que, uint8_t *data, uint8_t length) {
   commands_t *found_cmd;
 
   for (uint8_t i = 0; i < length; i++) {
-    switch (parse_state) {
+    switch (parse_status_g) {
     case OUTSIDE_COMMAND:
       if (data[i] == '<') {
         // Command start detected, switch to INSIDE_COMMAND state
-        parse_state = INSIDE_COMMAND;
-        command_index = 0;
-        memset(command_buffer, 0, MAX_COMMAND_LENGTH); // Clear command buffer
+        parse_status_g = INSIDE_COMMAND;
+        command_idx_g = 0;
+        memset(command_buffer_g, 0, MAX_COMMAND_LENGTH); // Clear command buffer
       } // Otherwise, ignore all other characters
       break;
 
     case INSIDE_COMMAND:
       if (data[i] == '>') {
         // Command end detected, process the command
-        if (command_index > 0) { // Ensure command is not empty
-          printf("Valid command: %s\n", command_buffer);
-          found_cmd = find_command(command_buffer);
+        if (command_idx_g > 0) { // Ensure command is not empty
+          printf("Valid command: %s\n", command_buffer_g);
+          found_cmd = find_command(command_buffer_g);
           if (NULL != found_cmd) {
             insert_element(que, found_cmd);
           } else {
@@ -68,19 +77,19 @@ void process_received_data(queue_t *que, uint8_t *data, uint8_t length) {
         } else {
           printf("Error: Empty command\n");
         }
-        parse_state = OUTSIDE_COMMAND;
+        parse_status_g = OUTSIDE_COMMAND;
       } else if (data[i] == '<') {
         // New command starts before the previous one ended, reset buffer
         printf("Error: Command start detected before previous command ended\n");
-        command_index = 0;
-        memset(command_buffer, 0, MAX_COMMAND_LENGTH); // Clear command buffer
-      } else if (command_index < MAX_COMMAND_LENGTH - 1) {
+        command_idx_g = 0;
+        memset(command_buffer_g, 0, MAX_COMMAND_LENGTH); // Clear command buffer
+      } else if (command_idx_g < MAX_COMMAND_LENGTH - 1) {
         // Add character to command buffer if there is space
-        command_buffer[command_index++] = data[i];
+        command_buffer_g[command_idx_g++] = data[i];
       } else {
         // Command buffer overflow, reset buffer and go to OUTSIDE_COMMAND state
         printf("Error: Command too long, buffer overflow\n");
-        parse_state = OUTSIDE_COMMAND;
+        parse_status_g = OUTSIDE_COMMAND;
       }
       break;
     }
@@ -90,9 +99,8 @@ void process_received_data(queue_t *que, uint8_t *data, uint8_t length) {
 uint8_t get_data_rx(uint8_t port, void *buff, uint8_t wanted_data) {
   static uint8_t idx = 0;
   const char *dummy_data_examples[] = {
-      "<run_led>", "<stop_led>", "<run_led>", "<stop_led>",
-      "<run_led>", "<stop_led>", "<run_led>", "<stop_led>",
 
+      "<run_adc>", "<run_adc>", "<stop_adc>", "<stop_adc>", "<run_led>"
       // "<run_led><tog_led><run_led><stop_led>"
       // "<cmd1><cmd2><cmd3>",
       // "<cmd1>",

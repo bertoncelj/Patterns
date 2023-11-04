@@ -88,22 +88,27 @@ void process_received_data(queue_t *que, uint8_t *data, uint8_t length) {
 }
 
 uint8_t get_data_rx(uint8_t port, void *buff, uint8_t wanted_data) {
+  static uint8_t idx = 0;
   const char *dummy_data_examples[] = {
-      "<run_led><tog_led><run_led><stop_led>"
+      "<run_led>", "<stop_led>", "<run_led>", "<stop_led>",
+      "<run_led>", "<stop_led>", "<run_led>", "<stop_led>",
+
+      // "<run_led><tog_led><run_led><stop_led>"
       // "<cmd1><cmd2><cmd3>",
       // "<cmd1>",
       // "<cmd4><incomplete", "complete><cmd5>",
       // "<empty><><cmd6>", "wrong><cmd7><cmd8>"
   };
-  // entree  = 0;
+
   // Choose a random example
-  int example_index =
-      rand() % (sizeof(dummy_data_examples) / sizeof(dummy_data_examples[0]));
+  // int example_index =
+  // rand() % (sizeof(dummy_data_examples) / sizeof(dummy_data_examples[0]));
 
-  printf("rnd: %d\n", example_index);
+  printf("input idx: %d\n", idx);
 
-  const char *dummy_data = dummy_data_examples[example_index];
+  const char *dummy_data = dummy_data_examples[idx];
   uint8_t length = strlen(dummy_data);
+  idx++;
 
   // If wanted_data is less than the length of dummy_data, adjust length
   if (length > wanted_data) {
@@ -120,8 +125,8 @@ void input(queue_t *que) {
   uint8_t rx_buffer[MAX_RECEIVED_DATA];
 
   printf("input\n");
-  if (entree == 1)
-    return;
+  // if (entree == 1)
+  // return;
 
   uint8_t received_length = get_data_rx(0, rx_buffer, MAX_RECEIVED_DATA);
 

@@ -38,8 +38,8 @@ typedef event_t (*task_action_func)(void);
 
 void initialize_state_table(task_func_t *funcs, state_action_t **state_table);
 
-event_t task_handler(state_action_t **state_table, input_state_t input_state,
-                     task_state_t task_state_led);
+event_t task_handler(input_state_t input_state, task_state_t task_state,
+                     task_func_t *task_func);
 
 void print_state_table(state_action_t **state_table);
 

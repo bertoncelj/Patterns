@@ -48,7 +48,7 @@ void uart_tx(int port, uint8_t *buffer, size_t size) {
     printf("Error: Buffer is NULL\n");
     return;
   }
-  printf("-----------------\n");
+
   fflush(stdout);
   for (size_t i = 0; i < size; ++i) {
     // Here you would actually send the data to the UART port.
@@ -58,7 +58,6 @@ void uart_tx(int port, uint8_t *buffer, size_t size) {
   }
   putchar('\n'); // Just to make the output more readable
   fflush(stdout);
-  printf("-----------------\n");
 }
 
 void output(void) {

@@ -109,6 +109,7 @@ static void test_queue_size_person_all(void **state) {
                       {4, "Bob"},     {5, "Charlie"}, {6, "Diana"},
                       {7, "Edward"},  {8, "Fiona"},   {9, "George"},
                       {10, "Hannah"}, {11, "Ian"},    {12, "Julia"}};
+
   Person output;
   for (uint8_t i = 0; i < 10 - 1; i++) {
     assert_int_equal(insert_element(&queue, &persons[i]),
@@ -119,6 +120,16 @@ static void test_queue_size_person_all(void **state) {
   assert_int_equal(insert_element(&queue, &persons[10]), 0);
   assert_int_equal(insert_element(&queue, &persons[11]), 0);
 
+  assert_int_equal(queue.size, 9);
+  // peek
+  Person person_lookfor;
+  for (uint8_t i = 0; i < 10 - 1; i++) {
+    assert_int_equal(peek_element(&queue, i, &person_lookfor), 1);
+    assert_int_equal(person_lookfor.id, persons[i].id); // should be John
+    assert_string_equal(person_lookfor.name, persons[i].name);
+  }
+
+  // remove and check
   for (uint8_t i = 0; i < 10 - 1; i++) {
 
     assert_int_equal(remove_element(&queue, &output), 1); // successful remove

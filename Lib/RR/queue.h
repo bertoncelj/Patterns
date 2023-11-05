@@ -31,7 +31,13 @@ int8_t is_active(queue_t *self);
 
 int8_t insert_element(queue_t *const cb, const void *item);
 int8_t remove_element(queue_t *const cb, void *item);
+
+int8_t peek_element(const queue_t *self, const size_t seek_elm, void *item);
 int8_t look_first_element(queue_t *const self, void *item);
+
+int8_t find_element(queue_t *self, const void *item_to_seacrh,
+                    void *const help_item);
+
 size_t remaining_space(queue_t *const self);
 size_t used_space(queue_t *const self);
 

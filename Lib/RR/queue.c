@@ -58,6 +58,23 @@ int8_t insert_element(queue_t *self, const void *item) {
   return 1;
 }
 
+int8_t find_element(queue_t *self, const void *item_to_seacrh,
+                    void *const help_item) {
+
+  if (is_empty(self))
+    return 0;
+
+  for (uint8_t idx = 0; idx < self->size; idx++) {
+
+    if (peek_element(self, idx, help_item)) {
+      if (memcmp(help_item, item_to_seacrh, self->item_size) == 0) { // found it
+        return 1;
+      }
+    }
+  }
+  return 0;
+}
+
 int8_t insert_bytes(queue_t *self, const void *data, size_t btw) {
   uint16_t free_space;
   uint16_t copy_size;
@@ -88,9 +105,8 @@ int8_t insert_bytes(queue_t *self, const void *data, size_t btw) {
   // write data in top part
   if (btw > 0) {
     memcpy(&self->buffer[self->head], &data[copy_size], btw);
-    self->head = self->head =
-        (self->head + btw) %
-        (self->capacity * self->item_size); // item_size must be 1
+    self->head = (self->head + btw) %
+                 (self->capacity * self->item_size); // item_size must be 1
   }
 
   // check if there was no buffer overflow
@@ -99,6 +115,23 @@ int8_t insert_bytes(queue_t *self, const void *data, size_t btw) {
 
   return btw + copy_size;
 }
+
+// from 0 .. size - 1
+int8_t peek_element(const queue_t *self, const size_t seek_elm, void *item) {
+  uint16_t item_pos;
+  if (self == NULL || is_empty(self))
+    return 0;
+
+  if (seek_elm > self->size)
+    return 0;
+
+  item_pos = (self->tail + (self->item_size * (seek_elm))) %
+             (self->capacity * self->item_size);
+  memcpy(item, &self->buffer[item_pos], self->item_size);
+
+  return 1;
+}
+
 int8_t remove_element(queue_t *const self, void *item) {
   // Check inputs
   if (self == NULL || item == NULL)

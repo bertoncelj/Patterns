@@ -6,6 +6,7 @@
 
 #include "event_table.h"
 #include "input.h"
+#include "queue.h"
 
 #define MAX_RECEIVED_DATA 100
 #define MAX_COMMAND_LENGTH 100
@@ -29,7 +30,7 @@ __inline static int8_t _cmdcmp(const uint8_t *cmd1, const uint8_t *cmd2) {
   return *(const uint8_t *)cmd1 - *(const uint8_t *)cmd2;
 }
 
-commands_t *find_command(uint8_t *command) {
+static commands_t *find_command(uint8_t *command) {
   // Check input
   if (command == NULL)
     return NULL;
@@ -100,7 +101,8 @@ uint8_t get_data_rx(uint8_t port, void *buff, uint8_t wanted_data) {
   static uint8_t idx = 0;
   const char *dummy_data_examples[] = {
 
-      "<run_adc>", "<run_adc>", "<stop_adc>", "<stop_adc>", "<run_led>"
+      "<run_adc>",  "<run_led>", "<run_led>", "",
+      "<stop_adc>", "",          ""
       // "<run_led><tog_led><run_led><stop_led>"
       // "<cmd1><cmd2><cmd3>",
       // "<cmd1>",

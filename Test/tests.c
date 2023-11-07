@@ -138,11 +138,36 @@ static void test_queue_size_person_all(void **state) {
   }
 }
 
+static void test_queue_bytes(void **state) {
+  (void)state; // unused
+  uint8_t buffer[10];
+  queue_t que;
+
+  // Init test
+  uint8_t data[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  init_queue(&que, (uint8_t *)buffer, sizeof(buffer[0]), 10 + 1);
+
+  // fill data bytes into queue
+  assert_int_equal(insert_bytes(&que, data, 10), 10);
+  assert_memory_equal(buffer, data, 10);
+
+  // get 5 elements out of buffer
+  uint8_t get_data[10] = {0};
+  assert_int_equal(remove_bytes(&que, get_data, 5), 5);
+  assert_memory_equal(get_data, data, 5);
+
+  assert_int_equal(insert_bytes(&que, data, 10), 5);
+}
+
 int main(void) {
   const struct CMUnitTest tests[] = {
+      // item queue
       cmocka_unit_test(test_queue_uint8_size_10_all),
       cmocka_unit_test(test_queue_size_person),
       cmocka_unit_test(test_queue_size_person_all),
+
+      // bytes queue
+      cmocka_unit_test(test_queue_bytes),
   };
   return cmocka_run_group_tests(tests, NULL, NULL);
 }

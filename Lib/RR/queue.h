@@ -38,6 +38,9 @@ int8_t look_first_element(queue_t *const self, void *item);
 int8_t find_element(queue_t *self, const void *item_to_seacrh,
                     void *const help_item);
 
+size_t insert_bytes(queue_t *self, const void *data, size_t btw);
+size_t remove_bytes(queue_t *self, void *data, size_t btr);
+
 size_t remaining_space(queue_t *const self);
 size_t used_space(queue_t *const self);
 

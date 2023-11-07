@@ -75,9 +75,10 @@ int8_t find_element(queue_t *self, const void *item_to_seacrh,
   return 0;
 }
 
-int8_t insert_bytes(queue_t *self, const void *data, size_t btw) {
+size_t insert_bytes(queue_t *self, const void *data, size_t btw) {
   uint16_t free_space;
   uint16_t copy_size;
+  const uint8_t *data_u8 = data;
 
   // Check inputs
   // item size must be 1
@@ -94,17 +95,21 @@ int8_t insert_bytes(queue_t *self, const void *data, size_t btw) {
   if (btw == 0)
     return 0;
 
+  // before writting into buffer we increase size
+  self->size += btw;
+
   // write data into first part
-  copy_size = self->capacity - self->head;
-  memcpy(&self->buffer[self->head], data, copy_size);
+  copy_size = MIN(self->capacity - self->head, btw);
+  memcpy(&self->buffer[self->head], data_u8, copy_size);
+  // NOTE: Here is no need to goes over buffer cuz cipy_size is always smaller
+  // then buffer end
   self->head = (self->head + copy_size) %
                (self->capacity * self->item_size); // item_size must be 1
-  self->size += copy_size;
   btw -= copy_size;
 
   // write data in top part
   if (btw > 0) {
-    memcpy(&self->buffer[self->head], &data[copy_size], btw);
+    memcpy(&self->buffer[self->head], &data_u8[copy_size], btw);
     self->head = (self->head + btw) %
                  (self->capacity * self->item_size); // item_size must be 1
   }
@@ -116,6 +121,51 @@ int8_t insert_bytes(queue_t *self, const void *data, size_t btw) {
   return btw + copy_size;
 }
 
+size_t remove_bytes(queue_t *self, void *data, size_t btr) {
+  uint16_t full_space;
+  uint16_t copy_size;
+  uint8_t *data_u8 = data;
+
+  // Check inputs
+  // item size must be 1
+  if (self == NULL || data == NULL || btr == 0 || self->item_size != 1)
+    return 0;
+
+  // Check if full
+  if (is_empty(self))
+    return 0;
+
+  // Check if there is aviable free space to write
+  full_space = used_space(self);
+  btr = MIN(full_space, btr);
+  if (btr == 0)
+    return 0;
+
+  // before writting into buffer we increase size
+  self->size += btr;
+
+  // write data into first part
+  copy_size = MIN(self->capacity - self->tail, btr);
+  memcpy(data_u8, &self->buffer[self->tail], copy_size);
+  // NOTE: Here is no need to goes over buffer cuz cipy_size is always smaller
+  // then buffer end
+  self->tail = (self->tail + copy_size) %
+               (self->capacity * self->item_size); // item_size must be 1
+  btr -= copy_size;
+
+  // write data in top part
+  if (btr > 0) {
+    memcpy(&data_u8[copy_size], &self->buffer[self->tail], btr);
+    self->tail = (self->tail + btr) %
+                 (self->capacity * self->item_size); // item_size must be 1
+  }
+
+  // check if there was no buffer overflow
+  if (self->tail >= self->capacity)
+    self->tail = 0;
+
+  return btr + copy_size;
+}
 // from 0 .. size - 1
 int8_t peek_element(const queue_t *self, const size_t seek_elm, void *item) {
   uint16_t item_pos;

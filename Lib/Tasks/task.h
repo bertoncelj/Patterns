@@ -6,16 +6,6 @@
 
 #include "event.h"
 
-#define INPUT_MAX 4
-#define STATE_MAX 3
-
-typedef enum func_s {
-  INIT_FUNC,
-  START_FUNC,
-  STOP_FUNC,
-  ERROR_FUNC
-} proto_func_t;
-
 // Driver actions structure
 typedef struct task_func_s {
   event_t (*init_task)(void);
@@ -28,11 +18,6 @@ typedef struct {
   task_state_t next_state;
   event_t (*action_func)(void);
 } state_action_t;
-
-typedef struct {
-  task_state_t state;
-  proto_func_t proto;
-} state_action_prototype_t;
 
 // Function pointer type for task action functions
 typedef event_t (*task_action_func)(void);

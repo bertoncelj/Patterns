@@ -4,6 +4,7 @@ add_executable(task_test
                stop_state.c
                task.c
                task_state.c
+               post_run_state.c
 )
 
 target_include_directories(task_test PUBLIC

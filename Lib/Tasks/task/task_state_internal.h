@@ -13,6 +13,7 @@ typedef void (*event_stop_func)(task_state_p);
 // };
 
 struct task_state_s {
+  char *name;
   void (*event_run_func)(task_state_p);
   void (*event_stop_func)(task_state_p);
 };

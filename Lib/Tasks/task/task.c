@@ -1,16 +1,14 @@
+#include <stdio.h>
+
 #include "task.h"
 #include "task_state_internal.h"
 
-struct task_s {
-  struct task_state_s state;
-  char *name;
-  int display;
-};
-
 void run_task(task_p instance) {
+  printf("in run_task\n");
   instance->state.event_run_func(&instance->state);
 }
 
 void stop_task(task_p instance) {
+  printf("in stop_task\n");
   instance->state.event_stop_func(&instance->state);
 }

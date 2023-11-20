@@ -15,4 +15,6 @@ void run_task(task_p instance);
 
 void stop_task(task_p instance);
 
+void process_task(task_p instance);
+
 #endif

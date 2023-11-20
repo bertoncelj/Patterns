@@ -6,10 +6,31 @@
 #include "task_state_internal.h"
 
 int main(void) {
+  struct task_s tasks;
+  task_p tt;
+  tt = &tasks;
 
-  // INIT
-  struct task_s ime;
-  transition_to_stop(&ime.state);
+  printf("init to stop\n!");
+  transition_to_stop(&tt->state);
+
+  stop_task(tt);
+  stop_task(tt);
+  run_task(tt);
+  run_task(tt);
+
+  process_task(tt);
+  run_task(tt);
+  run_task(tt);
+
+  stop_task(tt);
+  stop_task(tt);
+  process_task(tt);
+  process_task(tt);
+  run_task(tt);
+  stop_task(tt);
+
+
+
 
   printf("Hello Task!\n");
   run_task(&ime);
@@ -22,4 +43,3 @@ int main(void) {
   stop_task(&ime);
 
   return 0;
-}

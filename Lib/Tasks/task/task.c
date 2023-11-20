@@ -12,3 +12,7 @@ void stop_task(task_p instance) {
   printf("in stop_task\n");
   instance->state.event_stop_func(&instance->state);
 }
+
+void process_task(task_p instance) {
+  instance->state.event_process_func(&instance->state);
+}

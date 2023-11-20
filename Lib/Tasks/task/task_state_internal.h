@@ -6,6 +6,7 @@ typedef struct task_state_s *task_state_p;
 
 typedef void (*event_run_func)(task_state_p);
 typedef void (*event_stop_func)(task_state_p);
+typedef void (*event_process_func)(task_state_p);
 
 // struct task_state_s {
 // event_run_func start;
@@ -15,6 +16,7 @@ typedef void (*event_stop_func)(task_state_p);
 struct task_state_s {
   void (*event_run_func)(task_state_p);
   void (*event_stop_func)(task_state_p);
+  void (*event_process_func)(task_state_p);
 };
 
 #endif

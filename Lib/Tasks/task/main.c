@@ -29,17 +29,5 @@ int main(void) {
   run_task(tt);
   stop_task(tt);
 
-
-
-
-  printf("Hello Task!\n");
-  run_task(&ime);
-  run_task(&ime);
-  run_task(&ime);
-  run_task(&ime);
-  run_task(&ime);
-  run_task(&ime);
-  run_task(&ime);
-  stop_task(&ime);
-
   return 0;
+}

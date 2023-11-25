@@ -1,43 +1,48 @@
 {
-    "version": 5,
-    "cmakeMinimumRequired": {
-        "major": 3,
-        "minor": 23,
-        "patch": 0
+  "version": 5,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "basic",
+      "displayName": "simple",
+	  "hidden": true,
+      "binaryDir": "${sourceDir}/Build",
+      "cacheVariables": {
+        "ENABLE_WARNINGS": "ON",
+        "ENABLE_WARNINGS_AS_ERRORS": "OFF",
+        "CREATE_DOXYGEN_DOC": "OFF",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
     },
-    "configurePresets": [
-        {
-            "name": "simple",
-            "displayName": "simple",
-            "description": "Default build for MinGW",
-            "generator": "MinGW Makefiles",
-            "binaryDir": "${sourceDir}/Build",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "MINGW_TOOLCHAIN_PATH": "C:/MinGW/bin/",
-                "ENABLE_WARNINGS": "ON",
-                "ENABLE_WARNINGS_AS_ERRORS": "OFF",
-                "CREATE_DOXYGEN_DOC": "OFF",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-            }
-        },
-        {
-            "name": "clangd",
-            "displayName": "Configure preset using toolchain file",
-            "description": "Sets Ninja generator, build and install directory",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_TOOLCHAIN_FILE": "",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
-            }
-        }
-    ],
-    "buildPresets": [
-        {
-            "name": "dev",
-            "configurePreset": "simple"
-        }
-    ]
+    {
+      "name": "MinGW-Debug",
+      "inherits":"basic",
+      "description": "Default build for MinGW compiler",
+      "generator": "MinGW Makefiles",
+      "binaryDir": "${sourceDir}/Build_MinGW",
+      "toolchainFile": "${sourceDir}/cmake/mingw-toolchain.cmake",
+      "cacheVariables":{
+        "CMAKE_BUILD_TYPE": "Debug",
+        "MINGW_TOOLCHAIN_PATH": "C:/MinGW/bin/"
+      }
+    },
+	{
+      "name": "simulation",
+      "inherits":"basic",
+      "description": "win10 only ",
+      "cacheVariables":{
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "basic"
+    }
+  ]
 }

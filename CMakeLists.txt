@@ -1,4 +1,6 @@
-include(Cmake/mingw-toolchain.cmake)
+if(ENABLE_MINGW)
+  include(Cmake/mingw-toolchain.cmake)
+endif()
 cmake_minimum_required(VERSION 3.23)
 
 project(Patterns 
@@ -23,7 +25,7 @@ option(ENABLE_WARNINGS_AS_ERRORS "Enable to treat warnings as errors." OFF)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Cmake/)
 include(ConfigGuard)
 include(FetchCMocka)
-include(mingw-toolchain)
+# include(mingw-toolchain)
 
 if(ENABLE_WARNINGS)
     include(Warnings)

@@ -100,9 +100,25 @@ void process_received_data(queue_t *que, uint8_t *data, uint8_t length) {
 uint8_t get_data_rx(uint8_t port, void *buff, uint8_t wanted_data) {
   static uint8_t idx = 0;
   const char *dummy_data_examples[] = {
+      "RUN STOP NEXT KILL WRITE READ",
+      "<meas RUN>",
+      "<meas STOP>",
+      "<meas WRITE HEXSTR 10 12312>",
+      "<meas WRITE REG0 U8 10 12312>",
+      "<meas WRITE REG1 U16 10 12312>",
+      "<meas WRITE REG2 U32 10 12312>",
+      "<meas WRITE REG1 I32 10 12312>",
+      "<meas READ  REG1 I32 10 >",
+      "<meas READ ?>",
+      "<meas READ ?>",
+      "<meas READ  REG1 I32 10 >",
 
-      "<run_adc>",  "<run_led>", "<run_led>", "",
-      "<stop_adc>", "",          ""
+      "<run_adc>",
+      "<run_led>",
+      "<run_led>",
+      "",
+      "<stop_adc>",
+      "",
       // "<run_led><tog_led><run_led><stop_led>"
       // "<cmd1><cmd2><cmd3>",
       // "<cmd1>",

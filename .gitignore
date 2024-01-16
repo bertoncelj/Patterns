@@ -1,6 +1,6 @@
 # CMake 
 # Build results
-[Bb]uild/
+[Bb]uild_*/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/

@@ -30,6 +30,17 @@
         "MINGW_TOOLCHAIN_PATH": "C:/MinGW/bin/"
       }
     },
+    {
+      "name": "gcc",
+      "inherits":"basic",
+      "description": "Docker Ubuntu gcc compiler",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/Build_GCC",
+      "toolchainFile": "${sourceDir}/cmake/gcc-toolchain.cmake",
+      "cacheVariables":{
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
 	{
       "name": "simulation",
       "inherits":"basic",

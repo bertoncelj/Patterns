@@ -1,4 +1,19 @@
 ## Usage
+# Docker images
+
+### Docker GCC:
+
+Run Dockerfile.gcc to build image from gcc lib ?!?:
+
+    docker build -f Dockerfile.gcc -t patterns_gcc . 
+
+    docker run --rm -v .:/usr/src/myapp -w /usr/src/myapp patterns_gcc:latest cmake --preset=gcc 
+
+Dockerfile image patterns: 
+
+    docker run -it -v  .:/app patterns bash
+
+
 
 Please note that the commands have to be executed from the `build` subdirectory.
 

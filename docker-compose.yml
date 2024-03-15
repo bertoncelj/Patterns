@@ -1,0 +1,37 @@
+# # services:
+# #   patterns_service:
+# #     image: patterns
+# #     container_name: patterns_container
+# #     volumes:
+# #       - .:/app
+# #     command: bash
+# #     tty: true
+# #     stdin_open: true
+# #
+# services:
+#   patterns_service:
+#     image: patterns:latest
+#     volumes:
+#       - .:/app
+#     depends_on:
+#       - pat_ser
+#   pat_ser:
+#     image: patterns_gcc:latest
+#
+version: '3'
+
+services:
+  patterns:
+    image: patterns
+    volumes:
+      - /C/Users/berto/Documents/Project/Patterns:/app/data
+    # other configurations like ports or environment variables go here
+
+  patterns_gcc:
+    image: patterns_gcc
+    volumes:
+      - /C/Users/berto/Documents/Project/Patterns:/app/data
+    # other configurations like ports or environment variables go here
+
+volumes:
+  shared_data:
